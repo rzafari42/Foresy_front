@@ -28,50 +28,50 @@ const FormStepComponent = ({ onSubmit }: FormStepComponentProps) => {
   return (
     <form onSubmit={handleSubmit(handleSubmitSignup)} className="flex flex-col gap-4 w-full">
       {/* First Line Fields (firstname + lastname) */}
-      <div className="flex w-full gap-6">
-          <div className="flex-1 flex flex-col gap-1">
-            <label htmlFor="firstname" className="text-sm font-medium text-gray-700">
-              Prénom:
-            </label>
-            <input
-              type="text"
-              id="firstname"
-              placeholder="Prénom"
-              {...register("firstName")}
-              className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none text-black"
-            />
-            {
-              errors.firstName && (
-                <span className="text-sm text-red-500">
-                  {errors.firstName?.message}
-                  </span>
-              )
-            }
-          </div>
-          <div className="flex-1 flex flex-col gap-1">
-            <label htmlFor="lastname" className="text-sm font-medium text-gray-700">
-              Nom:
-            </label>
-            <input
-              type="text"
-              id="lastname"
-              placeholder="Nom"
-              {...register("lastName")}
-              className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none text-black"
-            />
-            {
-              errors.lastName && (
-                <span className="text-sm text-red-500">
-                  {errors.lastName?.message}
-                </span>
-              )
-            }
-          </div>
+      <div className="flex lg:flex-row flex-col gap-4 lg:gap-6">
+        <div className="flex flex-col gap-1 w-full">
+          <label htmlFor="firstname" className="text-left text-sm font-medium text-gray-700">
+            Prénom:
+          </label>
+          <input
+            type="text"
+            id="firstname"
+            placeholder="Prénom"
+            {...register("firstName")}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none text-black"
+          />
+          {
+            errors.firstName && (
+              <span className="text-sm text-red-500">
+                {errors.firstName?.message}
+              </span>
+            )
+          }
+        </div>
+        <div className="flex flex-col gap-1 w-full">
+          <label htmlFor="lastname" className="text-left text-sm font-medium text-gray-700">
+            Nom:
+          </label>
+          <input
+            type="text"
+            id="lastname"
+            placeholder="Nom"
+            {...register("lastName")}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none text-black"
+          />
+          {
+            errors.lastName && (
+              <span className="text-sm text-red-500">
+                {errors.lastName?.message}
+              </span>
+            )
+          }
+        </div>
       </div>
 
       {/* Second Line Fields (email) */}
       <div className="flex flex-col gap-1">
-        <label htmlFor="email" className="text-sm font-medium text-gray-700">
+        <label htmlFor="email" className="text-left text-sm font-medium text-gray-700">
           Email:
         </label>
         <input
@@ -79,7 +79,7 @@ const FormStepComponent = ({ onSubmit }: FormStepComponentProps) => {
           id="email"
           placeholder="Email"
           {...register("email")}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none  text-black"
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none text-black"
         />
         {
           errors.email && (
@@ -92,7 +92,7 @@ const FormStepComponent = ({ onSubmit }: FormStepComponentProps) => {
 
       {/* Third Line Fields (password) */}
       <div className="flex flex-col gap-1">
-        <label htmlFor="password" className="text-sm font-medium text-gray-700">
+        <label htmlFor="password" className="text-left text-sm font-medium text-gray-700">
           Mot de passe:
         </label>
         <input
@@ -100,7 +100,7 @@ const FormStepComponent = ({ onSubmit }: FormStepComponentProps) => {
           id="password"
           placeholder="Mot de passe"
           {...register("password")}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none  text-black"
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none text-black"
         />
         {
           errors["password"] && (
@@ -113,7 +113,7 @@ const FormStepComponent = ({ onSubmit }: FormStepComponentProps) => {
 
       {/* Fourth Line Fields (confirm password) */}
       <div className="flex flex-col gap-1">
-        <label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700">
+        <label htmlFor="confirmPassword" className="text-left text-sm font-medium text-gray-700">
           Confirmer le mot de passe:
         </label>
         <input

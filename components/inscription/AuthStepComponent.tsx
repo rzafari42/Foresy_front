@@ -1,13 +1,14 @@
 "use client";
 
-import { AuthStep, SIGNUP_METHOD } from "@/lib/constants/signUpSteps";
-import Image from "next/image";
-
+import { IAuthStep } from "@/lib/types/signUp";
+import { SIGNUP_METHOD } from "@/lib/constants/signUpSteps";
+  
 interface AuthStepComponentProps {
-  step: AuthStep;
+  step: IAuthStep;
   onSelectMethod: (method: string) => void;
 }
 
+// Component for the authentication step with different signup options (e.g., Google, LinkedIn, Email)
 const AuthStepComponent = ({ step, onSelectMethod }: AuthStepComponentProps) => {
   return (
     <div className="flex flex-col gap-4 w-full">

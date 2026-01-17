@@ -1,134 +1,53 @@
-import { size, z } from "zod";
+import {
+  IOptionsStep,
+  IAuthStep,
+  IFormStep,
+} from "@/lib/types/signUp";
+
 import { MdEmail } from "react-icons/md";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-
-// ===========================
-// Types & Constants
-// ===========================
 
 export const SIGNUP_METHOD = {
   OAUTH: "OAUTH",
   EMAIL: "EMAIL",
 } as const;
 
-export const BUTTON_TYPE = {
+const BUTTON_TYPE = {
   SUBMIT: "SUBMIT",
 } as const;
 
-export const ACTIVITY_STATUS = {
+const ACTIVITY_STATUS = {
   REGISTERED: "REGISTERED",
   IN_CREATION: "IN_CREATION",
 } as const;
 
-export const COMPANY_SIZE = {
+const COMPANY_SIZE = {
   INDEPENDENT: "INDEPENDENT",
   SMALL: "SMALL",
   LARGE: "LARGE",
 } as const;
 
-export const REGULATED_STATUS = {
+const COMPANY_SIZE_DETAILED = {
+  INDEPENDENT: "INDEPENDENT",
+  AUTO_ENTREPRENEUR: "AUTO_ENTREPRENEUR",
+  EURL: "EURL",
+  SASU: "SASU",
+  SA_SAS: "SA_SAS",
+} as const;
+
+const REGULATED_STATUS = {
   YES: "YES",
   NO: "NO",
 } as const;
 
-// ===========================
-// Interfaces
-// ===========================
 
-export interface StepOption {
-  label: string;
-  description?: string;
-  value?: string;
-}
-
-export interface BaseStep {
-  title: string;
-  description: string;
-}
-
-export interface OptionsStep extends BaseStep {
-  options: StepOption[];
-}
-
-export interface SearchStep extends BaseStep {
-  searchBar: {
-    placeHolder: string;
-  };
-  alert: {
-    label: string;
-    description: string;
-  };
-}
-
-export interface SignupMethodOption {
-  type: typeof SIGNUP_METHOD[keyof typeof SIGNUP_METHOD];
-  label: string;
-  icon: React.ComponentType<{ size: number }>;
-}
-
-export interface AuthStep {
-  title?: string;
-  description?: string;
-  signupOptions: SignupMethodOption[];
-}
-
-export interface FormField {
-  label: string;
-  placeholder: string;
-  type?: string;
-  name?: string;
-}
-
-export interface FormButton {
-  type: typeof BUTTON_TYPE[keyof typeof BUTTON_TYPE];
-  label: string;
-}
-
-export interface FormStep {
-  title?: string;
-  description?: string;
-  fields: {
-    first_line: FormField[];
-    second_line: FormField[];
-    third_line: FormField[];
-  };
-  buttons: FormButton[];
-}
-
-// ===========================
-// Validation Schemas (Zod)
-// ===========================
-
-export const stepOneSchema = z.object({
-  activityStatus: z.enum([ACTIVITY_STATUS.REGISTERED, ACTIVITY_STATUS.IN_CREATION]),
-});
-
-export const stepTwoSchema = z.object({
-  companySize: z.enum([COMPANY_SIZE.INDEPENDENT, COMPANY_SIZE.SMALL, COMPANY_SIZE.LARGE]),
-});
-
-export const stepThreeSchema = z.object({
-  searchQuery: z.string().min(1, "La recherche ne peut pas être vide"),
-  selectedCompany: z.string().optional(),
-});
-
-export const stepFourSchema = z.object({
-  isRegulated: z.enum([REGULATED_STATUS.YES, REGULATED_STATUS.NO]),
-});
-
-export const stepSixSchema = z.object({
-  firstName: z.string().min(2, "Le prénom doit contenir au moins 2 caractères"),
-  lastName: z.string().min(2, "Le nom doit contenir au moins 2 caractères"),
-  email: z.string().email("Email invalide"),
-  password: z.string().min(8, "Le mot de passe doit contenir au moins 8 caractères"),
-});
-
-// ===========================
-// Sign Up Steps Configuration
-// ===========================
+/**
+ *  Etapes d'inscription
+ */
 
 const SignUpSteps = {
+  // Rensignement de la situation de l'activité
   STEP_ONE: {
     title: "Quelle situation correspond le mieux à votre activité ?",
     description: "Afin de mieux vous connaître et de personnaliser votre expérience, dites-nous si votre activité est déjà immatriculée ou en cours de création.",
@@ -144,8 +63,9 @@ const SignUpSteps = {
         value: ACTIVITY_STATUS.IN_CREATION,
       },
     ],
-  } as OptionsStep,
+  } as IOptionsStep,
 
+  // Rensignement de la taille de l'activité
   STEP_TWO: {
     title: "Quelle est la taille de votre activité ?",
     description: "Afin de mieux vous connaître et de personnaliser votre expérience, partagez-nous la taille de votre activité.",
@@ -163,7 +83,36 @@ const SignUpSteps = {
         value: COMPANY_SIZE.LARGE,
       },
     ],
-  } as OptionsStep,
+  } as IOptionsStep,
+
+  // Renseignement du type d'activité indépendante
+  STEP_TWO_BIS: {
+    title: "Quelle est la taille de votre activité ?",
+    description: "Afin de mieux vous connaître et de personnaliser votre expérience, partagez-nous la taille de votre activité.",
+    options: [
+      {
+        label: "Indépendant",
+        description: "EI ou profession libérale",
+        value: COMPANY_SIZE_DETAILED.INDEPENDENT,
+      },
+      {
+        label: "Auto-entrepreneur",
+        value: COMPANY_SIZE_DETAILED.AUTO_ENTREPRENEUR,
+      },
+      {
+        label: "EURL",
+        value: COMPANY_SIZE_DETAILED.EURL,
+      },
+      {
+        label: "SASU",
+        value: COMPANY_SIZE_DETAILED.SASU,
+      },
+      {
+        label: "SA ou SAS",
+        value: COMPANY_SIZE_DETAILED.SA_SAS,
+      }
+    ]
+  } as IOptionsStep,
 
   // STEP_THREE: {
   //   title: "Recherchez votre activité",
@@ -177,6 +126,7 @@ const SignUpSteps = {
   //   },
   // } as SearchStep,
 
+  // Renseignement du statut réglementé
   STEP_FOUR: {
     title: "Votre activité est-elle réglementée ?",
     description: "Les activités réglementées sont soumises à des spécificités de gestion que nous ne prenons pas encore en charge. Pas de panique, nous pouvons faire tout le reste !",
@@ -190,8 +140,9 @@ const SignUpSteps = {
         value: REGULATED_STATUS.NO,
       },
     ],
-  } as OptionsStep,
+  } as IOptionsStep,
 
+  // Choix du mode d'inscription
   STEP_FIVE: {
     signupOptions: [
       {
@@ -210,8 +161,9 @@ const SignUpSteps = {
         icon: MdEmail,
       },
     ],
-  } as AuthStep,
+  } as IAuthStep,
 
+  // Inscription via email
   STEP_SIX: {
     title: "Créez votre compte",
     description: "Renseignez vos informations personnelles pour finaliser votre inscription.",
@@ -253,7 +205,7 @@ const SignUpSteps = {
         label: "Valider mon inscription",
       },
     ],
-  } as FormStep,
+  } as IFormStep,
 };
 
 export default SignUpSteps;

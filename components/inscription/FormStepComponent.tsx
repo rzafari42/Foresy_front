@@ -1,111 +1,137 @@
 "use client";
 
-import { FormStep } from "@/lib/constants/signUpSteps";
 import { useState } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SignUpInputs, signUpSchema } from "@/lib/schemas/schemas";
 
 interface FormStepComponentProps {
-  step: FormStep;
   onSubmit: (data: Record<string, string>) => void;
   defaultValues?: Record<string, string>;
 }
 
-const FormStepComponent = ({ step, onSubmit, defaultValues = {} }: FormStepComponentProps) => {
-  const [formData, setFormData] = useState<Record<string, string>>(defaultValues);
-  const [errors, setErrors] = useState<Record<string, string>>({});
+const FormStepComponent = ({ onSubmit }: FormStepComponentProps) => {
 
-  const handleChange = (name: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors((prev) => {
-        const newErrors = { ...prev };
-        delete newErrors[name];
-        return newErrors;
-      });
-    }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignUpInputs>({
+    resolver: zodResolver(signUpSchema),
+  })
+
+
+  const handleSubmitSignup: SubmitHandler<SignUpInputs> = (data) => {
+    onSubmit(data);
   };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Simple validation
-    const newErrors: Record<string, string> = {};
-    const allFields = [
-      ...step.fields.first_line,
-      ...step.fields.second_line,
-      ...step.fields.third_line,
-    ];
-
-    allFields.forEach((field) => {
-      if (field.name && !formData[field.name]) {
-        newErrors[field.name] = `${field.label} est requis`;
-      }
-    });
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-
-    onSubmit(formData);
-  };
-
-  const renderField = (field: { label: string; placeholder: string; type?: string; name?: string }, index: number) => (
-    <div key={index} className="flex flex-col gap-2">
-      <label className="text-sm font-medium text-gray-700">
-        {field.label}
-      </label>
-      <input
-        type={field.type || "text"}
-        name={field.name}
-        placeholder={field.placeholder}
-        value={formData[field.name || ""] || ""}
-        onChange={(e) => handleChange(field.name || "", e.target.value)}
-        className={`px-4 py-3 border-2 rounded-lg focus:outline-none transition-colors ${
-          errors[field.name || ""]
-            ? "border-red-500 focus:border-red-500"
-            : "border-gray-200 focus:border-orange-500"
-        }`}
-      />
-      {errors[field.name || ""] && (
-        <span className="text-sm text-red-500">{errors[field.name || ""]}</span>
-      )}
-    </div>
-  );
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-6 w-full">
-      {/* First Line */}
-      {step.fields.first_line.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {step.fields.first_line.map((field, index) => renderField(field, index))}
-        </div>
-      )}
+    <form onSubmit={handleSubmit(handleSubmitSignup)} className="flex flex-col gap-4 w-full">
+      {/* First Line Fields (firstname + lastname) */}
+      <div className="flex w-full gap-6">
+          <div className="flex-1 flex flex-col gap-1">
+            <label htmlFor="firstname" className="text-sm font-medium text-gray-700">
+              Prénom:
+            </label>
+            <input
+              type="text"
+              id="firstname"
+              placeholder="Prénom"
+              {...register("firstName")}
+              className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none text-black"
+            />
+            {
+              errors.firstName && (
+                <span className="text-sm text-red-500">
+                  {errors.firstName?.message}
+                  </span>
+              )
+            }
+          </div>
+          <div className="flex-1 flex flex-col gap-1">
+            <label htmlFor="lastname" className="text-sm font-medium text-gray-700">
+              Nom:
+            </label>
+            <input
+              type="text"
+              id="lastname"
+              placeholder="Nom"
+              {...register("lastName")}
+              className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none text-black"
+            />
+            {
+              errors.lastName && (
+                <span className="text-sm text-red-500">
+                  {errors.lastName?.message}
+                </span>
+              )
+            }
+          </div>
+      </div>
 
-      {/* Second Line */}
-      {step.fields.second_line.length > 0 && (
-        <div className="flex flex-col gap-4">
-          {step.fields.second_line.map((field, index) => renderField(field, index))}
-        </div>
-      )}
+      {/* Second Line Fields (email) */}
+      <div className="flex flex-col gap-1">
+        <label htmlFor="email" className="text-sm font-medium text-gray-700">
+          Email:
+        </label>
+        <input
+          type="email"
+          id="email"
+          placeholder="Email"
+          {...register("email")}
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none  text-black"
+        />
+        {
+          errors.email && (
+            <span className="text-sm text-red-500">
+              {errors.email?.message}
+            </span>
+          )
+        }
+      </div>
 
-      {/* Third Line */}
-      {step.fields.third_line.length > 0 && (
-        <div className="flex flex-col gap-4">
-          {step.fields.third_line.map((field, index) => renderField(field, index))}
-        </div>
-      )}
+      {/* Third Line Fields (password) */}
+      <div className="flex flex-col gap-1">
+        <label htmlFor="password" className="text-sm font-medium text-gray-700">
+          Mot de passe:
+        </label>
+        <input
+          type="password"
+          id="password"
+          placeholder="Mot de passe"
+          {...register("password")}
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none  text-black"
+        />
+        {
+          errors["password"] && (
+            <span className="text-sm text-red-500">
+              {errors.password?.message}
+            </span>
+          )
+        }
+      </div>
 
-      {/* Submit Button */}
-      {step.buttons.map((button, index) => (
-        <button
-          key={index}
-          type="submit"
-          className="w-full py-3 text-white font-semibold rounded-lg hover:bg-orange-50 transition-colors cursor-pointer"
-        >
-          {button.label}
-        </button>
-      ))}
+      {/* Fourth Line Fields (confirm password) */}
+      <div className="flex flex-col gap-1">
+        <label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700">
+          Confirmer le mot de passe:
+        </label>
+        <input
+          type="password"
+          id="confirmPassword"
+          placeholder="Confirmer le mot de passe"
+          {...register("confirmPassword")}
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none  text-black"
+        />
+        {
+          errors["confirmPassword"] && (
+            <span className="text-sm text-red-500">
+              {errors.confirmPassword?.message}
+            </span>
+          )
+        }
+      </div>
+      <input type="submit" className="text-white text-base font-medium py-2.5 px-5 rounded-3xl focus:outline-none bg-gradient-to-r from-[#FF8A4C] to-[#F05252] cursor-pointer" value="Se connecter" />
     </form>
   );
 };

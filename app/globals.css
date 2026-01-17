@@ -11,6 +11,7 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --gradient-orange: linear-gradient(to top, #FF8A4C, #F05252);
+  --font-helvetica: 'Helvetica Neue'
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -23,7 +24,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-family: "Inter", Arial, sans-serif;
   font-size: 14px;
   font-weight: 500;
 }

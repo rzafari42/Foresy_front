@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useForm, SubmitHandler} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ForgotPasswordInputs, forgotPasswordSchema } from "@/lib/schemas";
+import { ForgotPasswordInputs, forgotPasswordSchema } from "@/lib/schemas/schemas";
 import OnboardingConnexion from "@/components/layout/notConnected/OnboardingConnexion";
 
 const ForgotterPassword = () => {
@@ -19,7 +19,7 @@ const ForgotterPassword = () => {
             <div className="flex flex-col gap-8">
                 <div className="flex flex-col gap-2 w-full">
                     <h2 className="text-4xl font-bold">Réinitialiser <br /> votre mot de passe</h2>
-                    <p className="text-sm">
+                    <p className="text-base">
                         Saisissez l’adresse email que vous utilisez habituellement pour vous connecter à BusyBoard.
                     </p>
                 </div>

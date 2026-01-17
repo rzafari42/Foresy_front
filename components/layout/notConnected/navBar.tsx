@@ -26,9 +26,9 @@ const NavBar = () => {
 
     return (
         <nav className="relative flex flex-row lg:items-center justify-center items-left p-6">
-            <div className="logo flex-1 justify-start">
+            <div className="flex-1 justify-start">
                 <Link href="/">
-                    <Image src={Logo} alt="Foresy Logo" width={150} height={50} />
+                        <Image src={Logo} alt="Foresy Logo" width={150} height={50} style={{ width: "auto", height: "auto" }} priority/>
                 </Link>
             </div>
             <div className="lg:hidden absolute top-10 right-8 flex items-center z-50">

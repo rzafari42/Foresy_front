@@ -1,120 +1,113 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import SignUpSteps, { OptionsStep, SearchStep, AuthStep, FormStep } from "@/lib/constants/signUpSteps";
+import { ISignUpData, SignupStepKey } from "@/lib/types/auth";
+import { IOptionsStep, IAuthStep, IFormStep } from "@/lib/types/signUp";
+import SignUpSteps from "@/lib/constants/signUpSteps";
 import OptionsStepComponent from "./OptionsStepComponent";
 import SearchStepComponent from "./SearchStepComponent";
 import AuthStepComponent from "./AuthStepComponent";
 import FormStepComponent from "./FormStepComponent";
 import { BackButton } from "../ui/back-btn";
 
-type StepKey = "STEP_ONE" | "STEP_TWO" /*| "STEP_THREE"*/ | "STEP_FOUR" | "STEP_FIVE" | "STEP_SIX";
 
-interface SignUpData {
-  activityStatus?: string;
-  companySize?: string;
-  selectedCompany?: string;
-  isRegulated?: string;
-  authMethod?: string;
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  password?: string;
-}
 
 const SignUpStepper = () => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const [signUpData, setSignUpData] = useState<SignUpData>({});
+  const [signUpData, setSignUpData] = useState<ISignUpData>({});
   const [searchResults, setSearchResults] = useState<Array<{ id: string; name: string; siren: string; address: string }>>([]);
 
-  const stepKeys: StepKey[] = ["STEP_ONE", "STEP_TWO"/*, "STEP_THREE"*/, "STEP_FOUR", "STEP_FIVE", "STEP_SIX"];
-  const currentStepKey = stepKeys[currentStepIndex];
+  const stepKeys: SignupStepKey[] = ["STEP_ONE", "STEP_TWO", "STEP_TWO_BIS", /*"STEP_THREE",*/ "STEP_FOUR", "STEP_FIVE", "STEP_SIX"];
+  const currentStepKey : SignupStepKey = stepKeys[currentStepIndex];
   const currentStep = SignUpSteps[currentStepKey];
 
   const router = useRouter();
-  
 
-  const handleNext = () => {
+  const handleNext = (companySize?: string) => {
     if (currentStepIndex < stepKeys.length - 1) {
-      setCurrentStepIndex(currentStepIndex + 1);
+      if (currentStepKey === "STEP_TWO") {
+        // If company size is INDEPENDENT, go to STEP_TWO_BIS, else skip it
+        companySize === "INDEPENDENT" ? 
+          setCurrentStepIndex(currentStepIndex + 1) :
+          setCurrentStepIndex(currentStepIndex + 2) ;
+      }
+      else 
+        setCurrentStepIndex(currentStepIndex + 1);
     }
   };
 
   const handleBack = () => {
     if (currentStepIndex > 0) {
-      setCurrentStepIndex(currentStepIndex - 1);
+      console.log('currentStepKey', currentStepKey);
+      console.log('signUpData', signUpData);
+      // Special case: if going back from STEP_FOUR and companySizeDetail 
+      // (meaning STEP_TWO_BIS was skipped) is not set, skip STEP_TWO_BIS
+      if (currentStepKey === "STEP_FOUR" && signUpData.companySizeDetail === undefined) {
+        setCurrentStepIndex(currentStepIndex - 2);
+      }
+      else 
+        setCurrentStepIndex(currentStepIndex - 1);
     }
   };
 
   const handleStepOneSelect = (value: string) => {
     setSignUpData({ ...signUpData, activityStatus: value });
-    console.log('Signu Data:', signUpData);
     setTimeout(handleNext, 300);
   };
 
   const handleStepTwoSelect = (value: string) => {
-    setSignUpData({ ...signUpData, companySize: value });
-    console.log('Signu Data:', signUpData);
-    setTimeout(handleNext, 300);
+    setSignUpData({ 
+      ...signUpData, 
+      companySize: value,
+      companySizeDetail: undefined // Reset detail if going back
+    });
+    setTimeout(() => handleNext(value), 300);
   };
 
+  const handleStepTwoBisSelect = (value: string) => {
+    setSignUpData({ ...signUpData, companySizeDetail: value });
+    setTimeout(handleNext, 300);
+  };
+    
   const handleSearch = (query: string) => {
-    // TODO: Implement actual API call
-    // Simulate search results
-    setTimeout(() => {
-      setSearchResults([
-        {
-          id: "1",
-          name: "Entreprise Exemple",
-          siren: "123456789",
-          address: "123 Rue de la Paix, 75001 Paris",
-        },
-        {
-          id: "2",
-          name: "Auto-Entreprise Test",
-          siren: "987654321",
-          address: "45 Avenue des Champs, 75008 Paris",
-        },
-      ]);
-    }, 500);
+
+  
   };
 
   const handleCompanySelect = (companyId: string) => {
     setSignUpData({ ...signUpData, selectedCompany: companyId });
-    console.log('Signu Data:', signUpData);
     setTimeout(handleNext, 300);
+
   };
 
   const handleStepFourSelect = (value: string) => {
     setSignUpData({ ...signUpData, isRegulated: value });
-    console.log('Signu Data:', signUpData);
     setTimeout(handleNext, 300);
   };
 
   const handleAuthMethodSelect = (method: string) => {
-    setSignUpData({ ...signUpData, authMethod: method });
     if (method === "EMAIL") {
       setTimeout(handleNext, 300);
     } else {
-      // TODO: Handle OAuth flow
-      console.log("OAuth flow for:", method);
+      // Implement OAuth 
     }
   };
 
   const handleFormSubmit = (formData: Record<string, string>) => {
+    console.log("Form Data:", formData);
     setSignUpData({ ...signUpData, ...formData });
-    // TODO: Submit to API
     console.log("Final signup data:", { ...signUpData, ...formData });
-    alert("Inscription réussie ! (TODO: Implement API call)");
+    // TODO: Submit to API
   };
+
 
   const renderStep = () => {
     switch (currentStepKey) {
       case "STEP_ONE":
         return (
           <OptionsStepComponent
-            step={currentStep as OptionsStep}
+            step={currentStep as IOptionsStep}
             onSelect={handleStepOneSelect}
             selectedValue={signUpData.activityStatus}
           />
@@ -123,9 +116,18 @@ const SignUpStepper = () => {
       case "STEP_TWO":
         return (
           <OptionsStepComponent
-            step={currentStep as OptionsStep}
+            step={currentStep as IOptionsStep}
             onSelect={handleStepTwoSelect}
             selectedValue={signUpData.companySize}
+          />
+        );
+      
+      case "STEP_TWO_BIS":
+        return (
+          <OptionsStepComponent
+            step={currentStep as IOptionsStep}
+            onSelect={handleStepTwoBisSelect}
+            selectedValue={signUpData.companySizeDetail}
           />
         );
 
@@ -142,7 +144,7 @@ const SignUpStepper = () => {
       case "STEP_FOUR":
         return (
           <OptionsStepComponent
-            step={currentStep as OptionsStep}
+            step={currentStep as IOptionsStep}
             onSelect={handleStepFourSelect}
             selectedValue={signUpData.isRegulated}
           />
@@ -151,7 +153,7 @@ const SignUpStepper = () => {
       case "STEP_FIVE":
         return (
           <AuthStepComponent
-            step={currentStep as AuthStep}
+            step={currentStep as IAuthStep}
             onSelectMethod={handleAuthMethodSelect}
           />
         );
@@ -159,15 +161,8 @@ const SignUpStepper = () => {
       case "STEP_SIX":
         return (
           <FormStepComponent
-            step={currentStep as FormStep}
             onSubmit={handleFormSubmit}
-            defaultValues={{
-              firstName: signUpData.firstName || "",
-              lastName: signUpData.lastName || "",
-              email: signUpData.email || "",
-              password: signUpData.password || "",
-            }}
-          />
+          />  
         );
 
       default:
@@ -190,10 +185,12 @@ const SignUpStepper = () => {
       }
       {
         currentStepIndex > 0 ?
-          currentStepKey !== "STEP_SIX" && (
+           (
+            // Go back to previous step
             <BackButton onClick={handleBack} />
           ) :
-          <BackButton onClick={router.back} />
+          // Go back to previous page
+          <BackButton onClick={router.back} /> 
       }
     </div>
   );

@@ -1,26 +1,52 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SignUpInputs, signupSchema } from "@/lib/schemas";
+import { SignInInputs, signInSchema } from "@/lib/schemas/schemas";
+import { SignInAPI } from "@/lib/api/auth";
 import OnboardingConnexion from "@/components/layout/notConnected/OnboardingConnexion";
 import { BackButton } from "@/components/ui/back-btn";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+import { googleAuth, githubAuth } from "@/lib/api/auth";
 
 const ConnexionPage = () => {
 
     const router = useRouter();
 
-    const { register, handleSubmit, formState: { errors } } = useForm<SignUpInputs>({
-        resolver: zodResolver(signupSchema)
+    const { 
+        register, 
+        handleSubmit, 
+        formState: { errors } 
+    } = useForm<SignInInputs>({
+        resolver: zodResolver(signInSchema)
     });
 
-    const onSubmit: SubmitHandler<SignUpInputs> = (data) => {
+    const connectOAuth = (type : string) => {
+        switch (type) {
+            case "google":
+                googleAuth();
+                break;
+            case "github":
+                githubAuth();
+                break;
+            default:
+                break;
+        }
+        return;
+    }
 
-        console.log(data);
+    const onSubmit: SubmitHandler<SignInInputs> = async (data) => {
+        console.log("Registration Data:", data);
+
+        await SignInAPI(data)
+            .then((response) => {
+                console.log("Signin successful:", response);
+            })
+            .catch((error) => {
+                console.error("Signin error:", error);
+            });
     };
     
     return (
@@ -28,13 +54,17 @@ const ConnexionPage = () => {
             <div className="flex flex-col justify-self-center gap-8 w-full">
                 <h2 className="text-4xl font-bold">Ravi de vous revoir</h2>
                 <div className="flex flex-col gap-2">
-                    <button className="flex flex-row justify-center items-center lg:px-20 px-10 lg:py-4 py-2 gap-4 border border-gray-300 rounded-3xl text-base hover:cursor-pointer">
-                        {/* <Image src="/icons/google.svg" alt="Google Logo" width={20} height={20} /> */}
+                    <button 
+                        className="flex flex-row justify-center items-center lg:px-20 px-10 lg:py-4 py-2 gap-4 border border-gray-300 rounded-3xl text-base hover:cursor-pointer"
+                        onClick={() => connectOAuth("google")}
+                    >
                         <FcGoogle size={20} />
                         <span>Se connecter avec Google</span>
                     </button>
-                    <button className="flex flex-row justify-center items-center lg:px-20 px-10 lg:py-4 py-2 gap-4 border border-gray-300 rounded-3xl text-base hover:cursor-pointer">
-                        {/* <Image src="/icons/github.svg" alt="Github Logo" width={20} height={20} /> */}
+                    <button 
+                        className="flex flex-row justify-center items-center lg:px-20 px-10 lg:py-4 py-2 gap-4 border border-gray-300 rounded-3xl text-base hover:cursor-pointer"
+                        onClick={() => connectOAuth("github")}
+                    >   
                         <FaGithub size={20} />
                         <span>Se connecter avec Github</span>
                     </button>
@@ -53,9 +83,14 @@ const ConnexionPage = () => {
                                 type="email" 
                                 {...register("email")} 
                                 placeholder="exemple@mail.com"
-                                className="w-full px-4 py-3.5 border border-gray-300 text-gray-500 text-base rounded-md"
+                                className="w-full px-4 py-3.5 border border-gray-300 text-balck text-base rounded-md"
                             />
-                            {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
+                            {
+                                errors.email && 
+                                    <span className="text-red-500 text-sm">
+                                        {errors.email.message}
+                                    </span>
+                            }
                         </div>
                     </div>
                     <div className="flex flex-col justify-center items-start gap-2">
@@ -71,9 +106,14 @@ const ConnexionPage = () => {
                                 type="password" 
                                 {...register("password")} 
                                 placeholder="********"
-                                className="w-full px-4 py-3.5 border border-gray-300 text-gray-500 text-base rounded-md"
+                                className="w-full px-4 py-3.5 border border-gray-300 text-black text-base rounded-md"
                             />
-                            {errors.password && <span className="text-red-500 text-sm">{errors?.password.message}</span>}
+                            {
+                                errors.password && 
+                                    <span className="text-red-500 text-sm">
+                                        {errors?.password.message}
+                                    </span>
+                            }
                         </div>
                     </div>
                     <input type="submit" className="text-white text-base font-medium py-2.5 px-5 rounded-3xl focus:outline-none bg-gradient-to-r from-[#FF8A4C] to-[#F05252] cursor-pointer" value="Se connecter" />

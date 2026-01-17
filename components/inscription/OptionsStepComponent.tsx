@@ -1,10 +1,10 @@
 "use client";
 
-import { OptionsStep } from "@/lib/constants/signUpSteps";
+import { IOptionsStep } from "@/lib/types/signUp";
 import { useState } from "react";
 
 interface OptionsStepComponentProps {
-  step: OptionsStep;
+  step: IOptionsStep;
   onSelect: (value: string) => void;
   selectedValue?: string;
 }
@@ -21,8 +21,8 @@ const OptionsStepComponent = ({ step, onSelect, selectedValue }: OptionsStepComp
         step.options.map((option, index) => (
           <button
             key={index}
-            onClick={() => handleSelect(option.value ? option.value : "")}
-            className="flex flex-col p-6 border border-gray-200 rounded-lg text-left transition-all hover:bg-orange-50 cursor-pointer"
+            onClick={() => handleSelect(option.value)}
+            className={`flex flex-col p-6 border border-gray-200 rounded-lg text-left transition-all hover:bg-orange-50 cursor-pointer ${selectedValue === option.value ? "bg-orange-50" : ""}`}
           >
             <h4 className="text-lg font-semibold mb-1">{option.label}</h4>
             {option.description && (

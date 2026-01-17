@@ -3,7 +3,6 @@ import { useRouter } from "next/navigation";
 import { usePathname } from 'next/navigation';
 import Image from "next/image";
 import Link from "next/link";
-import { inter } from "@/lib/fonts";
 import Stack from "@/public/images/stack.svg"
 import Logo from "@/public/images/busyBoardLogo_light.svg"
 
@@ -12,7 +11,7 @@ const OnboardingConnexion = ({ children }: { children: React.ReactNode }) => {
     const pathname = usePathname();
     
     return (
-        <div className={`${inter.className} flex flex-row w-full min-h-screen`}>
+        <div className="flex flex-row w-full min-h-screen">
             <div className="hidden lg:flex flex-col bg-linear-to-r from-[#FF8A4C] to-[#F05252] w-1/2 justify-center items-center">
                 <Image src={Stack} alt="Foresy Logo"/>
                 <h1 className="text-white text-xl mt-8">Additional information about benefit</h1>

@@ -22,7 +22,7 @@ const OptionsStepComponent = ({ step, onSelect, selectedValue }: OptionsStepComp
           <button
             key={index}
             onClick={() => handleSelect(option.value)}
-            className={`flex flex-col p-6 border border-gray-200 rounded-lg text-left transition-all hover:bg-orange-50 cursor-pointer ${selectedValue === option.value ? "bg-orange-50" : ""}`}
+            className={`flex flex-col p-6 border border-gray-200 rounded-lg text-left transition-all hover:bg-gray-100 cursor-pointer ${selectedValue === option.value ? "bg-gray-200" : ""}`}
           >
             <h4 className="text-lg font-semibold mb-1">{option.label}</h4>
             {option.description && (

@@ -10,7 +10,7 @@ import { TfiClose } from "react-icons/tfi";
 import Link from "next/link";
 
 
-const NavBar = () => {
+const PublicNavBar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { width } = useWindowDimensions();
 
@@ -28,7 +28,7 @@ const NavBar = () => {
         <nav className="relative flex flex-row lg:items-center justify-center items-left p-6">
             <div className="flex-1 justify-start">
                 <Link href="/">
-                        <Image src={Logo} alt="Foresy Logo" width={150} height={50} style={{ width: "auto", height: "auto" }} priority/>
+                    <Image src={Logo} alt="Foresy Logo" width={150} height={50} style={{ width: "auto", height: "auto" }} priority/>
                 </Link>
             </div>
             <div className="lg:hidden absolute top-10 right-8 flex items-center z-50">
@@ -70,4 +70,4 @@ const NavBar = () => {
     )
 }
 
-export default NavBar;
+export default PublicNavBar;

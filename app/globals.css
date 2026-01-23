@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "flowbite-react/plugin/tailwindcss";
+@source "../.flowbite-react/class-list.json";
 
 :root {
   --background: #F9FAFB;
@@ -14,6 +16,7 @@
   --font-helvetica: 'Helvetica Neue'
 }
 
+
 /* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0A0A0A;
@@ -27,4 +30,8 @@ body {
   font-family: "Inter", Arial, sans-serif;
   font-size: 14px;
   font-weight: 500;
+}
+
+.bg-gradient-orange-light {
+  background: linear-gradient(to right, #FFC1A1, #FFAAAA);
 }

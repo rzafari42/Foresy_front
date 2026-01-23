@@ -1,6 +1,5 @@
 import React from 'react';
 import { useState } from 'react';
-import { IoInformationCircle } from "react-icons/io5";
 import InfoBubble from './info';
 
 const Card = ({ title, infoBubble, children } : { title: string, infoBubble?: string, children?: React.ReactNode }) => {

@@ -1,14 +1,10 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { usePathname } from 'next/navigation';
 import Image from "next/image";
 import Link from "next/link";
 import Stack from "@/public/images/stack.svg"
 import Logo from "@/public/images/busyBoardLogo_light.svg"
 
 const OnboardingConnexion = ({ children }: { children: React.ReactNode }) => {
-    const router = useRouter();
-    const pathname = usePathname();
     
     return (
         <div className="flex flex-row w-full min-h-screen">

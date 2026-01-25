@@ -1,10 +1,9 @@
-import React from 'react';
 import { useState } from 'react';
 import { IoInformationCircle } from "react-icons/io5";
 
-const InfoBubble = ({ text }: { text: string }) => {
+const InfoBubble = ({ info }: { info: { title: string, content: string } }) => {
     const [isInfoVisible, setIsInfoVisible] = useState(false);
-    
+    const { title, content } = info;
 
     return (
         <div
@@ -16,8 +15,17 @@ const InfoBubble = ({ text }: { text: string }) => {
             </span>
             {
                 isInfoVisible && (
-                    <div className="absolute -top-10 right-2 p-2 bg-gray-100 rounded shadow">
-                        {text}
+                    <div className="flex w-full flex-col absolute bottom-5 right-2 px-3 py-2.5 gap-1.5 bg-gray-800 rounded shadow">
+                        <strong
+                            className='text-white'
+                        >
+                            {title}
+                        </strong>
+                        <span
+                            className='text-gray-400'
+                        >
+                            {content}
+                        </span>
                     </div>
                 )
             }

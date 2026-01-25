@@ -41,7 +41,8 @@ export const ConnectedNavigationLinks :
         },
         { 
             label: "Déconnexion", 
-            to: "/logout",
+            to: "/", // Temporary redirect to home page. Time to implement logout logic.
+            //to: "/logout",
             icon: RiLogoutBoxRLine,
         },
     ] 

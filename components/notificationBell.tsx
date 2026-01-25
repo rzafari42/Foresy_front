@@ -2,9 +2,9 @@ import { colors } from "flowbite-react/plugin/tailwindcss/colors";
 import { IconContext } from "react-icons";
 import { AiOutlineBell } from "react-icons/ai";
 
-const Notification = () => {
+const NotificationBell = () => {
     return (
-        <div className="relative flex items-center justify-center py-4 px-6 bg-orange-200 rounded-2xl cursor-pointer">
+        <div className="relative flex h-full items-center justify-center py-4 px-6 bg-orange-200 rounded-2xl cursor-pointer">
             <IconContext.Provider value={{ color: colors.orange[600], size: "24px" }} >
                 <AiOutlineBell />
             </IconContext.Provider>
@@ -15,4 +15,4 @@ const Notification = () => {
     )
 }
 
-export default Notification;
+export default NotificationBell;

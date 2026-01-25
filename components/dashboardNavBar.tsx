@@ -41,17 +41,17 @@ const DashboardNavBar = () => {
   };
 
   return (
-    <nav className="relative flex flex-col rounded-3xl items-center bg-gray-100 overflow-visible h-full w-auto z-50">
-      <div className="flex h-full w-full flex-col items-center gap-4 py-6 px-2 overflow-y-auto overflow-x-visible">
+    <nav className="relative flex flex-col rounded-3xl items-center bg-gray-100 overflow-visible w-auto z-50">
+      <div className="flex h-full w-full flex-col items-center gap-4 py-6 px-2 overflow-x-visible">
         {/* Fold button */}
-          <div className="absolute top-[50%] -right-4 z-10">
+          <div className="absolute top-[50%] -right-4 z-10 hover:cursor-pointer">
             <ArrowFoldBtn isFold={isMenuOpen} onClick={() => setIsMenuOpen(!isMenuOpen)} />
           </div>
 
           <button className="flex rounded-2xl gap-2 px-4 py-2 items-baseline justify-center bg-gradient-orange-light text-orange-700 font-normal hover:cursor-pointer">
             <BsShopWindow size={16} />
             {
-            isMenuOpen && 'Firstname Lastname'
+              isMenuOpen && 'Firstname Lastname'
             }
           </button>
 
@@ -74,7 +74,8 @@ const DashboardNavBar = () => {
               src={isMenuOpen ? Logo : LogoReduced} 
               alt="Foresy Logo" 
               width={isMenuOpen ? 150 : 30} 
-              height={50} 
+              height={50}
+              style={{width: 'auto', height: 'auto'}}
               priority
             />
           </Link>

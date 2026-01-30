@@ -1,5 +1,4 @@
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler, Legend } from "chart.js";
-import { title } from "process";
 import { Line } from "react-chartjs-2";
 
 

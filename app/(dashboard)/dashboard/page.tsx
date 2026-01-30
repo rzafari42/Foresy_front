@@ -9,6 +9,9 @@ import AlertMessage from "@/components/alertMessage";
 import Selector from "@/components/selector";
 import ChartArea from "@/components/chartArea";
 import { faker } from "@faker-js/faker";
+import DashboardDataTable from "@/components/dashboardDataTable";
+import { dashboardTableHeader } from "@/lib/constants/tablesHeader";
+import { PaymentStatus } from "@/lib/constants/paymentStatus";
 
 const Dashboard = () => {
 
@@ -45,6 +48,130 @@ const Dashboard = () => {
     },
   ]
 
+  const tmpDataTable = [
+    {
+      month: 'Janvier',
+      status: PaymentStatus.NEW,
+      ca: '12000',
+      expenses: '8000',
+      mop: '33 %',
+      tace: '75 %',
+      benchPeriod: '10 %',
+      tjmMoyen: '550 €',
+    },
+    {
+      month: 'Février',
+      status: PaymentStatus.PENDING,
+      ca: '15000',
+      expenses: '9000',
+      mop: '40 %',
+      tace: '70 %',
+      benchPeriod: '12 %',
+      tjmMoyen: '575 €',
+    },
+    {
+      month: 'Mars',
+      status: PaymentStatus.SENT,
+      ca: '15000',
+      expenses: '9000',
+      mop: '40 %',
+      tace: '70 %',
+      benchPeriod: '12 %',
+      tjmMoyen: '575 €',
+    },
+    {
+      month: 'Avril',
+      status: PaymentStatus.FULLY_PAID,
+      ca: '15000',
+      expenses: '9000',
+      mop: '40 %',
+      tace: '70 %',
+      benchPeriod: '12 %',
+      tjmMoyen: '575 €',
+    },
+    {
+      month: 'Mai',
+      status: PaymentStatus.FULLY_PAID,
+      ca: '15000',
+      expenses: '9000',
+      mop: '40 %',
+      tace: '70 %',
+      benchPeriod: '12 %',
+      tjmMoyen: '575 €',
+    },
+    {
+      month: 'Juin',
+      status: PaymentStatus.PAID,
+      ca: '15000',
+      expenses: '9000',
+      mop: '40 %',
+      tace: '70 %',
+      benchPeriod: '12 %',
+      tjmMoyen: '575 €',
+    },
+    {
+      month: 'Juillet',
+      status: PaymentStatus.PAID,
+      ca: '15000',
+      expenses: '9000',
+      mop: '40 %',
+      tace: '70 %',
+      benchPeriod: '12 %',
+      tjmMoyen: '575 €',
+    },
+    {
+      month: 'Août',
+      status: PaymentStatus.PAID,
+      ca: '15000',
+      expenses: '9000',
+      mop: '40 %',
+      tace: '70 %',
+      benchPeriod: '12 %',
+      tjmMoyen: '575 €',
+    },
+    {
+      month: 'Septembre',
+      status: PaymentStatus.PAID,
+      ca: '15000',
+      expenses: '9000',
+      mop: '40 %',
+      tace: '70 %',
+      benchPeriod: '12 %',
+      tjmMoyen: '575 €',
+    },
+    {
+      month: 'Octobre',
+      status: PaymentStatus.PAID,
+      ca: '15000',
+      expenses: '9000',
+      mop: '40 %',
+      tace: '70 %',
+      benchPeriod: '12 %',
+      tjmMoyen: '575 €',
+    },
+    {
+      month: 'Novembre',
+      status: PaymentStatus.PAID,
+      ca: '15000',
+      expenses: '9000',
+      mop: '40 %',
+      tace: '70 %',
+      benchPeriod: '12 %',
+      tjmMoyen: '575 €',
+    },
+    {
+      month: 'Décembre',
+      status: PaymentStatus.PAID,
+      ca: '15000',
+      expenses: '9000',
+      mop: '40 %',
+      tace: '70 %',
+      benchPeriod: '12 %',
+      tjmMoyen: '575 €',
+    },
+  ]
+
+
   console.log("TMP DATASET: ", tmpDataset);
   return (
     <>
@@ -64,6 +191,9 @@ const Dashboard = () => {
             <Selector options={filterOption} onSelect={(value) => setSelectedFilter(value)} selected={selectedFilter} />
           </div>
           <ChartArea  dataset={tmpDataset} labels={labels} />
+        </section>
+        <section>
+            <DashboardDataTable columns={dashboardTableHeader} rows={tmpDataTable} />
         </section>
     </>
   )
